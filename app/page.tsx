@@ -13,12 +13,12 @@ async function getUsers(): Promise<UsersResponse> {
 
 export default async function Home() {
   const usersResponse = await getUsers();
-
+  
   return (
     <div className={styles.page}>
       <h1>Thomas Points Leaderboard:</h1>
       <ul>
-        {usersResponse.users.map((user) => (
+        {usersResponse?.users?.map((user) => (
           <li key={user.id}>
             {user.name}: {user.points} points
           </li>
