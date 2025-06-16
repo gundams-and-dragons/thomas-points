@@ -1,11 +1,29 @@
 import styles from "./page.module.css";
+import type { User } from '@/app/types';
 
-export default function Home() {
+type UsersResponse  = {
+  users: User[]
+};
+
+async function getUsers(): Promise<UsersResponse> {
+  const res = await fetch(process.env.API_DOMAIN + "/users");
+  if (!res.ok) throw new Error("Failed to fetch users");
+  return res.json();
+}
+
+export default async function Home() {
+  const usersResponse = await getUsers();
+
   return (
     <div className={styles.page}>
-      <h1>Welcome to Thomas Points</h1>
-      <p>This a completely useless website designed to give Thomas arbitrary good boy points.</p>
-      <p>Instructions TBD.</p>
+      <h1>Thomas Points Leaderboard:</h1>
+      <ul>
+        {usersResponse.users.map((user) => (
+          <li key={user.id}>
+            {user.name}: {user.points} points
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
