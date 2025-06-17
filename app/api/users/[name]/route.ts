@@ -28,3 +28,25 @@ export async function GET(
     }
   );
 };
+
+export async function PATCH(
+  request: NextRequest,
+  { params }: { params: Promise<{ name: string }> }
+) {
+  try {
+    const body = await request.json();
+    const { name } = await params;
+    const client = await clientPromise;
+
+    const db = client.db('thomas_points');
+
+    //increment the points
+    const user = await db.collection('users').findOneAndUpdate({ name }, { $inc : { points: body.points }}, { returnDocument: 'after' });
+    return NextResponse.json({ user }, { status: 200 })
+  } catch (err) {
+    return NextResponse.json(
+      { error: 'Error updating points'},
+      { status: 500 }
+    )
+  }
+}
