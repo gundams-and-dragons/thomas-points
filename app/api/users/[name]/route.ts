@@ -43,7 +43,7 @@ export async function PATCH(
     //increment the points
     const user = await db.collection('users').findOneAndUpdate({ name }, { $inc : { points: body.points }}, { returnDocument: 'after' });
     return NextResponse.json({ user }, { status: 200 })
-  } catch (err) {
+  } catch (_err) {
     return NextResponse.json(
       { error: 'Error updating points'},
       { status: 500 }
